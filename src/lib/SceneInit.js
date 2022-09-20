@@ -301,7 +301,9 @@ export default class SceneInit {
             }
         }
     });
-    
+    window.addEventListener('touchstart', (e) => {
+        console.log(e.position);
+    });
     window.addEventListener('resize', () => this.onWindowResize(), false);
 
     // NOTE: Load space background.
