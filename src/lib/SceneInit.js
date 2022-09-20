@@ -242,6 +242,7 @@ export default class SceneInit {
         this.scene.add(wheatClone);
 
     });
+    /*
     window.addEventListener('keydown',(e) => {
         let modelNum = randomNumberInRange(0, model.length - 1);
 
@@ -300,9 +301,44 @@ export default class SceneInit {
                 objects.push(sphereClone);
             }
         }
-    });
-    window.addEventListener('touchstart', (e) => {
-        console.log(e.position);
+    });*/
+
+    const touch_position = new THREE.Vector2();
+    const touch_raycaster = new THREE.Raycaster();
+
+    window.addEventListener('pointerdown', (e) => {
+        //console.log(e.touches[0]);
+        //console.log(e.pointerType);
+        if(e.pointerType === 'touch')
+        {
+            let modelNum = randomNumberInRange(0, model.length - 1);
+            touch_position.x = (e.clientX / window.innerWidth) * 2 - 1;
+            touch_position.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            touch_raycaster.setFromCamera(touch_position, this.camera);
+
+            intersects = touch_raycaster.intersectObjects(this.scene.children);
+            intersects.forEach((intersect) =>{
+                if(intersect.object.name === 'ground') {
+                    const highlightPos = new THREE.Vector3().copy(intersect.point).floor().addScalar(0.5);
+                    testMesh.position.set(highlightPos.x, offset, highlightPos.z);
+                    const objectExist = objects.find(function(object) {
+                        return (object.position.x === testMesh.position.x)
+                        && (object.position.z === testMesh.position.z)
+                    });
+        
+                    if(!objectExist)
+                    {
+                        const sphereClone = loaded_model[modelNum].scene.clone();
+                        sphereClone.position.copy(testMesh.position);
+                        this.scene.add(sphereClone);
+                        objects.push(sphereClone);
+                        testMesh.material.color.setHex(0x00FFFF);
+                    }
+                    else
+                        testMesh.material.color.setHex(0xFF0000);
+                }
+            });
+        }
     });
     window.addEventListener('resize', () => this.onWindowResize(), false);
 
