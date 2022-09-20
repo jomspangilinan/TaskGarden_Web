@@ -19,7 +19,7 @@ function App() {
 
 
   return (
-    <div>test
+    <div>
       <canvas id='myThreeJsCanvas'/>
     </div>
   );
