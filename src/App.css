@@ -27,7 +27,18 @@
 .App-link {
   color: #61dafb;
 }
-
+.myThreeJsCanvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  background: url(https://r105.threejsfundamentals.org/threejs/resources/images/daikanyama.jpg) no-repeat center center ;
+  background-size: cover;
+}
+body {
+  margin: 0px;
+  overflow: hidden;
+  background: linear-gradient(33deg, rgb(249, 206, 183) 15.11%, rgb(173, 209, 242) 66.23%);
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
