@@ -57,7 +57,7 @@ export default class SceneInit {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.camera.position.set(5.5, 5.5, 5.5);
     this.controls.update();
-    this.controls.enabled = false;
+    this.controls.enabled = true;
 
     const lights = new THREE.PointLight( 0xffffff, 1, 0 );
     lights.position.set( 0, 50, 100 );
