@@ -48,27 +48,31 @@ export default class SceneInit {
       alpha: true,
       // NOTE: Anti-aliasing smooths out the edges.
       antialias: true,
+      //gammaOutput: true,
     });
+
+    this.renderer.gammaOutput = true;
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     // this.renderer.shadowMap.enabled = true;
     document.body.appendChild(this.renderer.domElement);
     //this.renderer.setClearColor( 0xaabbaa, 1 ); 
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.camera.position.set(5.5, 5.5, 5.5);
+    this.camera.position.set(-5.5, 5.5, -5.5);
+    
     this.controls.update();
     this.controls.enabled = true;
-
+    this.controls.maxPolarAngle = Math.PI/2; 
     const lights = new THREE.PointLight( 0xffffff, 1, 0 );
-    lights.position.set( 0, 50, 100 );
+    lights.position.set( 0, 50, -100 );
     this.scene.add( lights );
 
     const lights2 = new THREE.PointLight( 0xffffff, 1, 0 );
-    lights2.position.set( 0, 200, 100 );
+    lights2.position.set( 0, 200, -100 );
     this.scene.add( lights2 );
 
     const lights3 = new THREE.PointLight( 0xffffff, 1, 0 );
-    lights3.position.set( 0, -50, -100 );
+    lights3.position.set( 0, -50, 100 );
     this.scene.add( lights3 );
     // ambient light which is for the whole scene
     this.ambientLight = new THREE.AmbientLight(0xffffff, 1);
@@ -77,13 +81,13 @@ export default class SceneInit {
 
     // directional light - parallel sun rays
     this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    this.directionalLight.position.set(0, 16, 64);
+    this.directionalLight.position.set(0, 16, -64);
     this.scene.add(this.directionalLight);
 
     let planeMesh_model;
     const glftLoader = new GLTFLoader();
     
-    glftLoader.load('/assets/new_world_ver2.glb', (gltfScene) => {
+    glftLoader.load('/assets/world_final.glb', (gltfScene) => {
         planeMesh_model = gltfScene;    
         //gltfScene.scene.scale.set(6, 6, 6);
         gltfScene.scene.position.set(0, offset, 0);
