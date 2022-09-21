@@ -67,31 +67,33 @@ export default class SceneInit {
     lights2.position.set( 0, 200, 100 );
     this.scene.add( lights2 );
 
+    const lights3 = new THREE.PointLight( 0xffffff, 1, 0 );
+    lights3.position.set( 0, -50, -100 );
+    this.scene.add( lights3 );
     // ambient light which is for the whole scene
     this.ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    this.ambientLight.castShadow = true;
+    //this.ambientLight.castShadow = true;
     this.scene.add(this.ambientLight);
 
     // directional light - parallel sun rays
     this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    this.directionalLight.castShadow = true;
     this.directionalLight.position.set(0, 16, 64);
     this.scene.add(this.directionalLight);
 
     let planeMesh_model;
     const glftLoader = new GLTFLoader();
     
-    glftLoader.load('/assets/cliff_blockQuarter_rock.glb', (gltfScene) => {
+    glftLoader.load('/assets/removed_grid.glb', (gltfScene) => {
         planeMesh_model = gltfScene;    
-        gltfScene.scene.scale.set(6, 6, 6);
-        gltfScene.scene.position.set(0, 0, 0);
+        //gltfScene.scene.scale.set(6, 6, 6);
+        gltfScene.scene.position.set(0, offset, 0);
         this.scene.add(gltfScene.scene);
 
     });
     
-    //const grid = new THREE.GridHelper(6, 6);
-    //this.scene.add(grid);
-    //grid.position.y = offset;
+    const grid = new THREE.GridHelper(6, 6);
+    this.scene.add(grid);
+    grid.position.y = offset;
 
     const planeMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(6, 6),
@@ -161,87 +163,7 @@ export default class SceneInit {
   
           });
     }
-    glftLoader.load('/assets/crops_cornStageD.glb', (gltfScene) => { 
-        gltfScene.scene.scale.set(0.75, 0.75, 0.75);
-        gltfScene.scene.position.set(1.5, 0 + offset, 1.5);
-        objects.push(gltfScene.scene);
-        this.scene.add(gltfScene.scene);
-
-
-        const cornClone = gltfScene.scene.clone();
-        cornClone.position.set(-0.5, 0 + offset, 1.5);
-
-        objects.push(cornClone);
-        this.scene.add(cornClone);
-
-        //this.scene.add(sphereClone);
-    });
-
-    glftLoader.load('/assets/fence_corner.glb', (gltfScene) => { 
-        gltfScene.scene.scale.set(1.0, 1.0, 1.0);
-        gltfScene.scene.position.set(2.5, 0 + offset, 1.5);
-        objects.push(gltfScene.scene);
-        this.scene.add(gltfScene.scene);
-
-
-        const fenceClone = gltfScene.scene.clone();
-        fenceClone.rotation.y = 1.5;
-        fenceClone.position.set(-2.5, 0 + offset, 1.5);
-        objects.push(fenceClone);
-        this.scene.add(fenceClone);
-        //this.scene.add(sphereClone);
-    });
-
-    glftLoader.load('/assets/stone_smallB.glb', (gltfScene) => { 
-        gltfScene.scene.scale.set(1.0, 1.0, 1.0);
-        gltfScene.scene.position.set(-1.5, 0 + offset, 1.5);
-        objects.push(gltfScene.scene);
-        this.scene.add(gltfScene.scene);
-
-        const stoneClone = gltfScene.scene.clone();
-        stoneClone.position.set(-2.0, 0 + offset, 1.5);
-        this.scene.add(stoneClone);
-        
-        const stoneClone1 = gltfScene.scene.clone();
-        stoneClone1.position.set(2.0, 0 + offset, 1.5);
-        this.scene.add(stoneClone1);
-
-        //this.scene.add(sphereClone);
-    });
-    glftLoader.load('/assets/tent_detailedOpen.glb', (gltfScene) => {
-        planeMesh_model = gltfScene;    
-        gltfScene.scene.scale.set(2.0, 2.0, 2.0);
-        gltfScene.scene.position.set(0.5, 0 + offset, 1.5);
-
-        gltfScene.scene.rotation.y = 135;
-        objects.push(gltfScene.scene);
-        this.scene.add(gltfScene.scene);
-    });
-
-    glftLoader.load('/assets/crops_wheatStageA.glb', (gltfScene) => {
-        planeMesh_model = gltfScene;    
-        gltfScene.scene.position.set(1.5, 0 + offset, 1.5);
-        this.scene.add(gltfScene.scene);
-
-        const wheatClone = gltfScene.scene.clone();
-        wheatClone.position.set(2.5, 0 + offset, 1.5);
-        this.scene.add(wheatClone);
-
-        const wheatClone1 = gltfScene.scene.clone();
-        wheatClone1.position.set(-2.5, 0 + offset, 1.5);
-        this.scene.add(wheatClone1);
-    });
-
-    glftLoader.load('/assets/crops_wheatStageB.glb', (gltfScene) => {
-        planeMesh_model = gltfScene;    
-        gltfScene.scene.position.set(-1.5, 0 + offset, 1.5);
-        this.scene.add(gltfScene.scene);
-
-        const wheatClone = gltfScene.scene.clone();
-        wheatClone.position.set(-0.5, 0 + offset, 1.5);
-        this.scene.add(wheatClone);
-
-    });
+    
     /*
     window.addEventListener('keydown',(e) => {
         let modelNum = randomNumberInRange(0, model.length - 1);
@@ -311,15 +233,18 @@ export default class SceneInit {
         //console.log(e.pointerType);
         if(e.pointerType === 'touch')
         {
+            
             let modelNum = randomNumberInRange(0, model.length - 1);
             touch_position.x = (e.clientX / window.innerWidth) * 2 - 1;
             touch_position.y = -(e.clientY / window.innerHeight) * 2 + 1;
             touch_raycaster.setFromCamera(touch_position, this.camera);
-
+            
+            
             intersects = touch_raycaster.intersectObjects(this.scene.children);
             intersects.forEach((intersect) =>{
                 if(intersect.object.name === 'ground') {
                     const highlightPos = new THREE.Vector3().copy(intersect.point).floor().addScalar(0.5);
+                    if(highlightPos.x > 2.5 || highlightPos.z > 2.5)return;
                     testMesh.position.set(highlightPos.x, offset, highlightPos.z);
                     const objectExist = objects.find(function(object) {
                         return (object.position.x === testMesh.position.x)
