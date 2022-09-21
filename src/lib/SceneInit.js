@@ -2,6 +2,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+import myInitObject from '../GlobalVars.js';
+import myModelClicked from '../ModelVars.js';
 function randomNumberInRange(min, max) {
     // 👇️ get number between min (inclusive) and max (inclusive)
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -95,10 +98,10 @@ export default class SceneInit {
 
     });
     
-    /*
+    
     const grid = new THREE.GridHelper(6, 6);
     this.scene.add(grid);
-    grid.position.y = offset;*/
+    grid.position.y = offset;
 
     const planeMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(6, 6),
@@ -110,7 +113,7 @@ export default class SceneInit {
     planeMesh.rotateX(-Math.PI / 2);
     this.scene.add(planeMesh);
     planeMesh.name = 'ground';
-    planeMesh.position.set(0.5, 1.45, 0.5);
+    planeMesh.position.set(0, offset, 0);
 
     const testMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(1, 1),
@@ -144,29 +147,42 @@ export default class SceneInit {
     
     let folder = "/assets/";
     let model = [
-        "cactus_tall.glb",
-        "crops_wheatStageA.glb",
-        "flower_purpleA.glb",
-        "flower_purpleC.glb",
-        "flower_redA.glb",
-        "flower_yellowC.glb",
-        "stone_tallD.glb",
-        "stump_oldTall.glb",
-        "tree_palm.glb",
-        "tree_pineRoundE.glb",
-        "tree_pineTallD.glb",
-        "tree_simple.glb",
-        "tree_thin_fall.glb",
-        "crops_cornStageD.glb",
+        "cactus_tall",
+        "crops_wheatStageA",
+        "flower_purpleA",
+        "flower_purpleC",
+        "flower_redA",
+        "flower_yellowC",
+        "stone_tallD",
+        "stump_oldTall",
+        "tree_palm",
+        "tree_pineRoundE",
+        "tree_pineTallD",
+        "tree_simple",
+        "tree_thin_fall",
+        "crops_cornStageD",
     ]
+
+    const object_names = [];
+    
     for (let i = 0; i < model.length; i++) {
-        glftLoader.load(folder + model[i], (gltfScene) => {
+        glftLoader.load(folder + model[i] + '.glb', (gltfScene) => {
             loaded_model.push(gltfScene);
-            gltfScene.scene.scale.set(1.0, 1.0, 1.0);
-  
+            //gltfScene.scene.scale.set(1.0, 1.0, 1.0);
+            const model_index_pair = {};
+            model_index_pair.index = i;
+            model_index_pair.file = model[i];
+            model_index_pair.model = gltfScene;
+            object_names.push(model_index_pair)
           });
     }
     
+    
+    
+    window.addEventListener('mousemove',(e) => {
+        //console.log(object_names);
+        console.log(myModelClicked.someProps);
+    });
     /*
     window.addEventListener('keydown',(e) => {
         let modelNum = randomNumberInRange(0, model.length - 1);
@@ -230,10 +246,12 @@ export default class SceneInit {
 
     const touch_position = new THREE.Vector2();
     const touch_raycaster = new THREE.Raycaster();
+    
 
     window.addEventListener('pointerdown', (e) => {
         //console.log(e.touches[0]);
         //console.log(e.pointerType);
+        if(myInitObject.someProp ==='true') return;
         let modelNum = randomNumberInRange(0, model.length - 1);
         touch_position.x = (e.clientX / window.innerWidth) * 2 - 1;
         touch_position.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -244,19 +262,38 @@ export default class SceneInit {
         intersects.forEach((intersect) =>{
             if(intersect.object.name === 'ground') {
                 const highlightPos = new THREE.Vector3().copy(intersect.point).floor().addScalar(0.5);
-                if(highlightPos.x > 2.5 || highlightPos.z > 2.5)return;
+                const newPos = new THREE.Vector3().copy(intersect.point);
+                //console.log(newPos);
                 testMesh.position.set(highlightPos.x, offset + 0.01, highlightPos.z);
                 const objectExist = objects.find(function(object) {
                     return (object.position.x === testMesh.position.x)
                     && (object.position.z === testMesh.position.z)
                 });
-    
+
+                object_names.forEach((obj)=> {
+                    if(!myModelClicked.someProps)return;
+
+                    console.log(myModelClicked.someProps);
+                    if(obj.file === myModelClicked.someProps)
+                    {
+                        const sphereClone = obj.model.scene.clone();
+                        sphereClone.position.x = newPos.x;//(testMesh.position);
+                        sphereClone.position.y = offset + 0.01;
+                        sphereClone.position.z = newPos.z;//
+        
+                        this.scene.add(sphereClone);
+                        objects.push(sphereClone);
+                    }
+                });
+
+                
+                
                 if(!objectExist)
                 {
-                    const sphereClone = loaded_model[modelNum].scene.clone();
+                    /*const sphereClone = loaded_model[modelNum].scene.clone();
                     sphereClone.position.copy(testMesh.position);
                     this.scene.add(sphereClone);
-                    objects.push(sphereClone);
+                    objects.push(sphereClone);*/
                     testMesh.material.color.setHex(0x00FFFF);
                 }
                 else
@@ -278,7 +315,6 @@ export default class SceneInit {
     //   colorA: { type: 'vec3', value: new THREE.Color(0xffffff) },
     // };
   }
-
   animate() {
     // NOTE: Window is implied.
     // requestAnimationFrame(this.animate.bind(this));
