@@ -83,7 +83,7 @@ export default class SceneInit {
     let planeMesh_model;
     const glftLoader = new GLTFLoader();
     
-    glftLoader.load('/assets/new_world.glb', (gltfScene) => {
+    glftLoader.load('/assets/new_world_ver2.glb', (gltfScene) => {
         planeMesh_model = gltfScene;    
         //gltfScene.scene.scale.set(6, 6, 6);
         gltfScene.scene.position.set(0, offset, 0);
