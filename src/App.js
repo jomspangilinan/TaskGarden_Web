@@ -1,13 +1,9 @@
-import logo from './logo.svg';
+
 import './App.css';
 import { useEffect, useState  } from 'react';
 
-import * as THREE from 'three';
-
 import SceneInit from './lib/SceneInit';
 import React from 'react';
-//import Popup from 'reactjs-popup';
-//import 'reactjs-popup/dist/index.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "bootstrap/dist/css/bootstrap.min.css";
