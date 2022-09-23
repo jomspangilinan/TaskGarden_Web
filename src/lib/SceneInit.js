@@ -120,6 +120,9 @@ export default class SceneInit {
     this.touching = false;
 
     this.walkNow = false;
+
+    this.initialOpen = false;
+
   }
 
   
@@ -195,6 +198,7 @@ export default class SceneInit {
         this.characteranim = gltfScene;
         gltfScene.scene.matrixAutoUpdate = false;
         this.scene.add(gltfScene.scene);
+        
 
 
         this.mixer = new THREE.AnimationMixer(gltfScene.scene);
@@ -283,7 +287,8 @@ export default class SceneInit {
         this.yukaChar.setRenderComponent(this.characteranim.scene, this.sync);
 
         this.yukaChar.scale.set(0.1,0.1,0.1);
-        
+        this.yukaChar.rotation.set(0,0.9845570641660515,0,-0.1750639523166482);
+         //Quaternion {x: 0, y: 0.9845570641660515, z: 0, w: -0.1750639523166482}
         /*const path = new YUKA.Path();
         path.add( new YUKA.Vector3(-4,offset,4));
         path.add( new YUKA.Vector3(-6,offset,0));
@@ -463,7 +468,7 @@ export default class SceneInit {
         //console.log(e.touches[0]);
         //console.log(e.pointerType);
 
-        
+        //console.log(this.yukaChar.rotation);
         
         
         if(myInitObject.someProp ==='true') return;
@@ -586,14 +591,15 @@ export default class SceneInit {
         {
             if(this.trigger1.puke)
             {
-                if(myModelClicked.someProps)
+                if(myModelClicked.someProps || this.initialOpen)
                 {
-                this.mixer.stopAllAction();
-                this.PunchAction.reset();
-                this.PunchAction.fadeIn(0.5);
-                this.PunchAction.play();
-                this.touching = true;
-                this.walkNow = false;
+                    this.mixer.stopAllAction();
+                    this.PunchAction.reset();
+                    this.PunchAction.fadeIn(0.5);
+                    this.PunchAction.play();
+                    this.touching = true;
+                    this.walkNow = false;
+                    this.this.initialOpen = true;
                 }
             }
             else
