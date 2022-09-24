@@ -18,6 +18,12 @@ import myModelClicked from './ModelVars.js';
 
 
 function App() {
+  let search = window.location.search;
+  let params = new URLSearchParams(search);
+  let foo = params.get('query');
+
+  let headless = params.get('headless');
+
   const useAudio = url => {
     const [audio] = useState(new Audio(url));
     const [playing, setPlaying] = useState(false);
@@ -53,14 +59,14 @@ function App() {
   //const [playing, toggle] = useAudio('/assets/campsound.mp3');
 
   useEffect(() => {
-    const test = new SceneInit('myThreeJsCanvas');
+    if(headless===null)headless = 'false';
+    const test = new SceneInit('myThreeJsCanvas', headless);
     test.initialize();
     test.animate();
 
   }, []);
-  let search = window.location.search;
-let params = new URLSearchParams(search);
-let foo = params.get('query');
+
+
 const Buttonstyle = {
   margin: 0,
   top: 'auto',
