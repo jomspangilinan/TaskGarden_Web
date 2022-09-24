@@ -96,7 +96,7 @@ export default class SceneInit {
 
     this.time = new YUKA.Time();
     this.entityManager = new YUKA.EntityManager();
-    this.target.position.set(0,1.2,0);
+    this.target.position.set(-0.2,1.2,-0.2);
     this.target.boundingRadius = 0.25;
     this.arriveBehavior = new YUKA.ArriveBehavior(this.target.position);
 
@@ -108,7 +108,7 @@ export default class SceneInit {
 
     this.trigger1 = new this.TestClass( this.sphericalTriggerRegion);
     
-    this.trigger1.position.set(0,1.2,0);
+    this.trigger1.position.set(-0.2,1.2,-0.2);
     this.sphereMesh = new THREE.Mesh(
         new THREE.SphereGeometry(this.radius, 16, 16),
         new THREE.MeshBasicMaterial({
@@ -116,13 +116,13 @@ export default class SceneInit {
             color: 0xFFEA00
         })
     );  
-    this.sphereMesh.position.set(0,1.2,0);
+    this.sphereMesh.position.set(-0.2,1.2,-0.2);
     this.touching = false;
 
     this.walkNow = false;
 
     this.initialOpen = false;
-
+    this.tanim = true;
   }
 
   
@@ -285,7 +285,7 @@ export default class SceneInit {
         this.objs.push({gltfScene});
 
         this.yukaChar.setRenderComponent(this.characteranim.scene, this.sync);
-
+        
         this.yukaChar.scale.set(0.1,0.1,0.1);
         this.yukaChar.rotation.set(0,0.9845570641660515,0,-0.1750639523166482);
          //Quaternion {x: 0, y: 0.9845570641660515, z: 0, w: -0.1750639523166482}
@@ -304,8 +304,8 @@ export default class SceneInit {
         
         const followPathBehavior = new YUKA.FollowPathBehavior(path, 0.5);
         this.yukaChar.steering.add(followPathBehavior);*/
-
-        this.yukaChar.position.set(0, offset, 0);
+        //this.yukaChar.position.set(-0.09645010719344349,1.2, -0.2049397464613228)
+        this.yukaChar.position.set(-0.2, offset, -0.2);
         this.yukaChar.steering.add(this.arriveBehavior);
         this.yukaChar.maxSpeed = 1;
 
@@ -491,7 +491,6 @@ export default class SceneInit {
                 this.trigger1.position.copy(this.newPos);
                 this.sphereMesh.position.copy(this.newPos);
                 this.triggerOnce = true;
-                this.yukaChar.active = true;
                 this.trigger1.puke = false;
                 this.touching = false;
                 //console.log(newPos);
@@ -501,14 +500,14 @@ export default class SceneInit {
                 //Character_model.scene.position.y = offset + 0.01;
                 
                 
-                if(!myModelClicked.someProps)return;
+                
 
                 
                 const objectExist = objects.find(function(object) {
                     return (object.position.x === testMesh.position.x)
                     && (object.position.z === testMesh.position.z)
                 });
-
+                if(!myModelClicked.someProps)return;
                 object_names.forEach((obj)=> {
                     
 
@@ -523,6 +522,7 @@ export default class SceneInit {
         
                         this.scene.add(sphereClone);
                         objects.push(sphereClone);
+                        this.tanim = false;
                     }
                 });
 
@@ -591,7 +591,15 @@ export default class SceneInit {
         {
             if(this.trigger1.puke)
             {
-                if(myModelClicked.someProps || this.initialOpen)
+                if(!this.initialOpen)
+                {
+                    this.mixer.stopAllAction();
+                    this.WaveAction.reset();
+                    this.WaveAction.fadeIn(0.5);
+                    this.WaveAction.play();
+                    this.initialOpen = true;
+                }
+                if(myModelClicked.someProps && !this.tanim)
                 {
                     this.mixer.stopAllAction();
                     this.PunchAction.reset();
@@ -599,7 +607,7 @@ export default class SceneInit {
                     this.PunchAction.play();
                     this.touching = true;
                     this.walkNow = false;
-                    this.this.initialOpen = true;
+                    this.tanim = true;
                 }
             }
             else
