@@ -17,7 +17,10 @@ import myInitObject from './GlobalVars.js';
 import myModelClicked from './ModelVars.js';
 
 
+
+
 function App() {
+  
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let foo = params.get('query');
@@ -102,10 +105,9 @@ const imageClick = (e) => {
       <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Congratulations!</Modal.Title>
+          <Modal.Title>Assets</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        You received: {foo}!
         <ImageList sx={{ height: 450 }} cols={3} rowHeight={164}>
       {itemData.map((item) => (
         <ImageListItem key={item.img}>

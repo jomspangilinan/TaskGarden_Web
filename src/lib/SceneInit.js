@@ -8,13 +8,69 @@ import myModelClicked from '../ModelVars.js';
 
 import * as YUKA from 'yuka';
 import { Vehicle, Trigger } from 'yuka';
-function randomNumberInRange(min, max) {
-    // 👇️ get number between min (inclusive) and max (inclusive)
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+/*
+import firebase from 'firebase';
+  
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  };
+    
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
+
+console.log(db);
+db.collection("data").add({
+    Nane: 'nani',
+    Age: '12',
+    CourseEnrolled: 'course'
+})
+.then((docRef) => {
+    alert("Data Successfully Submitted");
+})
+
+db.collection("rewards").get().then((querySnapshot) => {
+         
+    // Loop through the data and store
+    // it in array to display
+    querySnapshot.forEach(element => {
+        var data = element.data();
+        console.log(data);
+          
+    });
+})
+*/
+
+/*
 
 
 
+const app = initializeApp(firebaseConfig);
+const db = getDatabase();*/
+/*
+const starCountRef = ref(db, 'rewards/');
+onValue(starCountRef, (snapshot) => {
+  const data = snapshot.val();
+  console.log(data);
+});*/
+
+
+
+/*
+
+
+const movieCollectionRef = collection(db, 'rewards')
+getDocs(movieCollectionRef).then(
+    response => {
+        console.log(response)
+    }
+).catch(error => console.log(error.message));
+*/
 export default class SceneInit {
 
     
@@ -51,7 +107,7 @@ export default class SceneInit {
     
     
     }
-
+    
     // NOTE: Core components to initialize Three.js app.
     this.headless = headless;
     
@@ -129,7 +185,7 @@ export default class SceneInit {
 
   
  
-  initialize() {
+initialize() {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(
         45,
@@ -442,7 +498,6 @@ export default class SceneInit {
             
             
             if(myInitObject.someProp ==='true' || this.headless ==='true') return;
-            let modelNum = randomNumberInRange(0, model.length - 1);
             touch_position.x = (e.clientX / window.innerWidth) * 2 - 1;
             touch_position.y = -(e.clientY / window.innerHeight) * 2 + 1;
             touch_raycaster.setFromCamera(touch_position, this.camera);
